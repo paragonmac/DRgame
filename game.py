@@ -1,6 +1,8 @@
 import tkinter as tk
 import threading
 import queue
+import player
+import goblin 
 import time
 import sys
 import random
@@ -40,17 +42,23 @@ class Game:
             pass
         finally:
             self.root.after(100, self.check_game_output_queue)
-            
+    
+    
+    ###### GAME COMMANDS ######        
     def worker(self):
         while True:
             time.sleep(1)  # simulate long running task
-            self.game_output_queue.put("Task finished") # put message onto queue
-            self.game_output_queue.put("Boobs lool") # put message onto queue
-       
+            goblin.goblin_behavior()
+    
+    @staticmethod   
     def quit():
         print("QUITTING GAME")
         game.root.destroy()
         sys.exit()
+        
+    @staticmethod    
+    def help():
+        game.game_output_queue.put("Commands: swing, quit, spawn, target, assess, help")
 
     def on_enter(self, event):
         # get user input and format it and send to game window
@@ -78,15 +86,18 @@ class Game:
             command_function()
             arg1, arg2, arg3 = "None", "None", "None"
         else:
-            print("Unknown command: {}".format(command))
+            self.game_output_queue.put("Unknown command: {}".format(command))
 
+    
     command_lookup = {
             #"swing": player.attack,
             "quit": quit,
             #"spawn": Goblin(name="Goblin", health=20, damage=5).spawn_goblin,
             #"target": player.target,
             #"assess": player.assess,
+            "help": help,
         }
+    
     arg_lookup = {
             "one": 1,
             "two": 2,
