@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"vim.handleKeys": {
+			"<C-d>": true,
+			"<C-s>": false,
+			"<C-z>": false
+		},
+		"github.copilot.advanced": {},
+		"github.copilot.enable": {
+			"*": true,
+			"plaintext": false,
+			"markdown": false,
+			"scminput": false
+		},
+
+	},
+
+}
