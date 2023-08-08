@@ -1,9 +1,7 @@
 import random
 import time
-import player
 
-
-class Goblin:
+class clsGoblin:
     def __init__(self, name, health, damage):
         loot_table = {'Gold': 0.5, 'Sword': 0.2, 'Shield': 0.1, 'Potion': 0.2}
         self.name = name
@@ -13,25 +11,19 @@ class Goblin:
         self.damage = damage
         self.loot_table = loot_table
         self.goblin_swing_timer = 0
-        
+        self.tribe = []
 
-    goblins = []
     def spawn_goblin(self):
-        if len(Goblin.goblins) < 6:
+        if len(self.tribe) < 6:
             goblin_names = ["Gobbi", "Gobby", "Goblo", "Gobba", "Gobber", "Gobbie", "Gobbo", "Gobbu", "Gobble", "Gobblin", "Goblet", "Goblin", "Goblu", "Goblyn", "Gobboz", "Gobbler", "Gobz", "Gobster", "Goblee", "Gobskull"]
             name = random.choice(goblin_names)
             health = random.randint(80, 120)
             damage = random.randint(8, 12)
-            goblin = Goblin(name, health, damage)
-            Goblin.goblins.append(goblin)
-            return print(f"{goblin.name} has spawned")
+            objGoblin = clsGoblin(name, health, damage)
+            self.tribe.goblins.append(objGoblin)
+            return print(f"{objGoblin.name} has spawned")
         else:
             print("Maximum number of goblins reached")
-            
-    def kill_loot_goblin(self):
-        assert player.attack_target is not None
-        #drop loot
-        del Goblin.goblins[player.attack_target]
     '''        
     #adds behaviors to the goblin like roaming from place to place and attacking the player when they get close enough
     def behaviors(self):
@@ -41,10 +33,12 @@ class Goblin:
     def roam(self):
         print(f"{self.name} is roaming")
     '''
-
     # Removes the goblin object
     def despawn_goblin(self):
         del self
+        
+    def loot(self):
+        ...
         
     def attack(self, player):
         if self.goblin_swing_timer <= 0:
@@ -52,5 +46,7 @@ class Goblin:
             player.health -= attack_damage
             self.goblin_swing_timer = 1
             print(f"{self.name} attacked {player.name} for {attack_damage} damage")
+            return player.health
         else:
             self.goblin_swing_timer -= 1
+            return player.health
