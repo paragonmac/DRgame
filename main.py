@@ -8,6 +8,9 @@ from player import clsPlayer
 
 
 class clsGame:
+    RoomID = 0
+    thread_game_output = None
+    thread_player_input = None
     monster_list = []
     last_command = []
     last_command_index = None
@@ -37,16 +40,20 @@ class clsGame:
         self.root = tk.Tk()
         self.root.geometry("1600x900")  # set screen size to 1600x900 pixels
         self.root.title("Game Window")
+        self.root.protocol("WM_DELETE_WINDOW", self.quit)  # call self.quit when the window is closed
 
         self.game_output_queue = queue.Queue()
 
         self.scrollbar = tk.Scrollbar(self.root, troughcolor='black')
         self.scrollbar.pack(side='right', fill='y')
-        self.gamewindow_text = tk.Text(self.root, height=1, font=('Arial', 20), yscrollcommand=self.scrollbar.set)
+
+        self.roomwindow = tk.Text(self.root, height=1, font=('Arial', 20), yscrollcommand=self.scrollbar.set)
+        self.roomwindow.config(bg='black', fg='white', highlightbackground='black', state='disabled')
+        self.roomwindow.pack(fill='both', expand=True, pady=(0, 2))
+
+        self.gamewindow_text = tk.Text(self.root, height=20, font=('Arial', 20), yscrollcommand=self.scrollbar.set)
         self.gamewindow_text.config(bg='black', fg='white', highlightbackground='black', state='disabled')
-        # set background color to black and foreground color to white
         self.gamewindow_text.pack(fill='both', expand=True, pady=(0, 12))
-        # make the text area take up the whole screen
 
         self.playerinput_var = tk.StringVar()
         self.playerinput_entry = tk.Entry(self.root, textvariable=self.playerinput_var, font=('Arial', 20,),
@@ -56,6 +63,7 @@ class clsGame:
         # set background color to black and foreground color to white
         self.playerinput_entry.place(relx=0, rely=0.95, relwidth=1, relheight=0.05)
         # make the text area take up 5% of the screen
+        self.main_game_loop_bool = True
 
         self.command_lookup["help"] = self.help
         self.command_lookup["quit"] = self.quit
@@ -182,17 +190,22 @@ class clsGame:
     def quit(self, *args):
         print("QUITTING GAME")
         self.root.destroy()
+        self.main_game_loop_bool = False
+        thread_game_output.join()
+        thread_gameLogicWorker.join()
         sys.exit()
 
     def main_game_loop(self, event=None):
-        while True:
+        while self.main_game_loop_bool is True:
             if len(clsGame.monster_list) != 0 and objPlayer.health > 0:
                 for monster in clsGame.monster_list:
                     attack_result = ""
                     roam_results = ""
                     attack_result, roam_results = clsGoblin.behaviors(monster, objPlayer)
-                    self.game_output_queue.put(attack_result)
-                    self.game_output_queue.put(roam_results)
+                    if attack_result:
+                        self.game_output_queue.put(attack_result)
+                    if roam_results:
+                        self.game_output_queue.put(roam_results)
             time.sleep(1)  # simulate long running task
 
     def start_game(self, *args):
@@ -202,6 +215,7 @@ class clsGame:
         self.game_output_queue.put("What do you do?")
 
     def run(self):
+        global thread_game_output, thread_gameLogicWorker
         thread_game_output = threading.Thread(target=self.check_game_output_queue)
         thread_game_output.setDaemon = True
 

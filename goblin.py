@@ -27,13 +27,11 @@ class clsGoblin:
 
     # adds behaviors to the goblin like roaming from place to place and attacking the player when they get close enough
     def behaviors(self, player):
-        if self.roaming_cooldown == 0 and self.incombat == 0:
-            print("Goblin behaviors called")
-            attack_result = self.attack(player)
-            roam_result = self.roam()
-            return attack_result, roam_result
-        # If the conditions are not met, return None
-        return None
+        print("Goblin behaviors called")
+        attack_result = self.attack(player)
+        roam_result = self.roam()
+        return attack_result, roam_result
+    # If the conditions are not met, return None
 
     def roam(self):
         self.roaming_cooldown = time.time() + 5
@@ -47,14 +45,26 @@ class clsGoblin:
         ...
 
     def attack(self, player):
-        if self.goblin_swing_timer <= 0:
+        current_time = time.time()
+        if self.goblin_swing_timer <= current_time:
             self.goblin_swing_timer = time.time() + self.attack_speed
             attack_damage = random.randint(1, self.damage)  # Generate random attack damage
             player.health -= attack_damage  # Subtract attack damage from player health
             if player.health <= 0:
                 player.death()
-            other_result = (f"{self.name} attacked you for {attack_damage} damage!")
+                other_result = (
+                    f"{self.name} attacked you for {attack_damage} damage!, "
+                    f"you have {player.health} health left"
+                )
+            else:
+                other_result = (
+                    f"{self.name} attacked you for {attack_damage} damage!, "
+                    f"you have {player.health} health left"
+                )
             return other_result
         else:
-            debug_message = f"{self.name} is not ready to attack. Swing timer: {self.goblin_swing_timer}"
+            debug_message = (
+                f"{self.name} is not ready to attack. Swing timer: {self.goblin_swing_timer}, "
+                f"Current time: {current_time}"
+            )
             print(debug_message)  # Print the debug message
