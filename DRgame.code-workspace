@@ -31,6 +31,8 @@
 			//"--exit-zero"
 			
 		],
+		"inline-bookmarks.view.showVisibleFilesOnly": false,
+		"processing.processingPath": "C:\\Program Files\\processing\\processing-4.3\\processing-java",
 		
 
 	},

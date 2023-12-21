@@ -1,5 +1,6 @@
 <room id="0">
-  <description>With a deafening crash, the cave entrance collapses behind you, sealing your fate.
+	<title>Collapsed Cave Entrance</title>
+	<description>With a deafening crash, the cave entrance collapses behind you, sealing your fate.
 You find yourself in a dim chamber, remnants of stonework lying in rubble. The damp, earthy
 smell fills your nostrils as faint light cracks from above. Evidence of goblin activity is
 everywhere: crude tools, scattered bones, makeshift shelters. Scratches on walls and fire
@@ -7,6 +8,8 @@ remnants tell of bustling goblin life, now mysteriously absent. Chilling silence
 distant dripping. Your eye catches faint tracks leading east, through a passage escaping the
 cave-in. The unknown awaits; you're not the first here, nor likely the last. The depths beckon,
 with no way back.</description>
-  <exit direction="east" to="1"/>
-  <objects none>
-</room>
+	<exit direction="east" to="1"/>
+	<objects>
+		<object id="lantern" name="Old Lantern">An old lantern lies abandoned...</object>
+	</objects>
+</room> 

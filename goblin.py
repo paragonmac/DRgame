@@ -3,7 +3,7 @@ import time
 
 
 class clsGoblin:
-    def __init__(self, name, health, damage):
+    def __init__(self, name, health):
         loot_table = {'Gold': 0.5, 'Sword': 0.2, 'Shield': 0.1, 'Potion': 0.2}
         self.name = name
         self.roaming_cooldown = 0
@@ -14,15 +14,14 @@ class clsGoblin:
         self.goblin_swing_timer = 0
         self.attack_speed = 4
 
-    def spawn_goblin():
+    def spawn_goblin(self):
         goblin_names = ["Gobbi", "Gobby", "Goblo", "Gobba", "Gobber",
                         "Gobbie", "Gobbo", "Gobbu", "Gobble", "Gobblin",
                         "Goblet", "Goblin", "Goblu", "Goblyn", "Gobboz",
                         "Gobbler", "Gobz", "Gobster", "Goblee", "Gobskull"]
         name = random.choice(goblin_names)
         health = random.randint(80, 120)
-        damage = random.randint(8, 12)
-        objGoblin = clsGoblin(name, health, damage)
+        objGoblin = clsGoblin(name, health)
         return objGoblin
 
     # adds behaviors to the goblin like roaming from place to place and attacking the player when they get close enough
@@ -45,6 +44,7 @@ class clsGoblin:
         ...
 
     def attack(self, player):
+        print(f"{self.name} Goblin attack called")
         current_time = time.time()
         if self.goblin_swing_timer <= current_time:
             self.goblin_swing_timer = time.time() + self.attack_speed

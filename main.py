@@ -3,6 +3,7 @@ import threading
 import queue
 import time
 import sys
+from room import clsRoom
 from goblin import clsGoblin
 from player import clsPlayer
 
@@ -14,6 +15,7 @@ class clsGame:
     monster_list = []
     last_command = []
     last_command_index = None
+    main_game_loop_bool = True
 
     command_lookup = {
         "help": help,
@@ -51,9 +53,9 @@ class clsGame:
         self.roomwindow.config(bg='black', fg='white', highlightbackground='black', state='disabled')
         self.roomwindow.pack(fill='both', expand=True, pady=(0, 2))
 
-        self.gamewindow_text = tk.Text(self.root, height=20, font=('Arial', 20), yscrollcommand=self.scrollbar.set)
-        self.gamewindow_text.config(bg='black', fg='white', highlightbackground='black', state='disabled')
-        self.gamewindow_text.pack(fill='both', expand=True, pady=(0, 12))
+        self.roomwindow = tk.Text(self.root, height=20, font=('Arial', 20), yscrollcommand=self.scrollbar.set)
+        self.roomwindow.config(bg='black', fg='white', highlightbackground='black', state='disabled')
+        self.roomwindow.pack(fill='both', expand=True, pady=(0, 12))
 
         self.playerinput_var = tk.StringVar()
         self.playerinput_entry = tk.Entry(self.root, textvariable=self.playerinput_var, font=('Arial', 20,),
@@ -134,10 +136,10 @@ class clsGame:
             msg = self.game_output_queue.get(0)  # try to get message from queue
             if msg is None:  # if there is no message in the queue
                 return  # return without doing anything
-            self.gamewindow_text.config(state='normal')
-            self.gamewindow_text.insert('end', msg + '\n')
-            self.gamewindow_text.see('end')
-            self.gamewindow_text.config(state='disabled')
+            self.roomwindow.config(state='normal')
+            self.roomwindow.insert('end', msg + '\n')
+            self.roomwindow.see('end')
+            self.roomwindow.config(state='disabled')
         except queue.Empty:
             pass
         finally:
@@ -196,6 +198,7 @@ class clsGame:
         sys.exit()
 
     def main_game_loop(self, event=None):
+        print("Main game loop started")
         while self.main_game_loop_bool is True:
             if len(clsGame.monster_list) != 0 and objPlayer.health > 0:
                 for monster in clsGame.monster_list:
@@ -206,6 +209,7 @@ class clsGame:
                         self.game_output_queue.put(attack_result)
                     if roam_results:
                         self.game_output_queue.put(roam_results)
+            clsGame.room_update()
             time.sleep(1)  # simulate long running task
 
     def start_game(self, *args):

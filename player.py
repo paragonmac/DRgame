@@ -54,7 +54,7 @@ class clsPlayer:
                     local_target_monster = None
                 else:
                     message = f"You hit {local_monster_object.name} " \
-                        f"dealing {self.damage} damage. Roundtime: {self.roundtime - current_time:.2f}"
+                        f"dealing {self.damage} damage leaving {self.health} left. Roundtime: {self.roundtime - current_time:.2f}"
             else:
                 message = "You must wait " \
                     f"{(self.roundtime - current_time):.2f} seconds before attacking again."
@@ -63,7 +63,7 @@ class clsPlayer:
             local_target_monster = 0
         return message, local_target_monster, local_monster_list
 
-    def assess(monster_list):
+    def assess(self, monster_list):
         monster_breakout = []
         for i, monster in enumerate(monster_list):
             monster_info = f"#{i+1}: {monster.name} has {monster.health} health remaining"
