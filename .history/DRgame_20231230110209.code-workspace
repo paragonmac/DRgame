@@ -1,0 +1,48 @@
+{
+	"folders": [
+		{
+			"path": "C:\Users\trito\Documents\Codestuff\Python_Projects\DRgame
+		}
+	],
+	"settings": {
+		"vim.handleKeys": {
+			"<C-d>": true,
+			"<C-s>": false,
+			"<C-z>": false
+		},
+		"github.copilot.advanced": {},
+		"github.copilot.enable": {
+			"*": true,
+			"plaintext": false,
+			"markdown": false,
+			"scminput": false
+		},
+
+		//add pep8 and flake8 to the linter
+		"flake8.args": [
+			"--max-line-length=120",
+			//"--ignore=E402,E501,E731,W503,W504",
+			//"--exclude=venv",
+			//"--max-complexity=10",
+			//"--select=E9,F63,F7,F82",
+			//"--show-source",
+			//"--statistics",
+			"--count",
+			//"--exit-zero"
+			
+		],
+		"inline-bookmarks.view.showVisibleFilesOnly": false,
+		"processing.processingPath": "C:\\Program Files\\processing\\processing-4.3\\processing-java",
+		
+
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+	
+			
+
+	]
+	},
+
+}
